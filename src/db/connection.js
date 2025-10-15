@@ -5,8 +5,9 @@ const connectDB = async () => {
     // FORCE Atlas URI - no localhost fallback
     const mongoUri = 'mongodb+srv://nikitayadav4048_db_user:orbosismain@cluster0.q8trfdq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
     
-    console.log('🔍 FORCED Atlas connection');
+    console.log('🔍 FORCED Atlas connection - ' + new Date().toISOString());
     console.log('🔍 Connecting to Atlas cluster...');
+    console.log('🔍 URI format check:', mongoUri.startsWith('mongodb+srv') ? 'CORRECT' : 'WRONG');
     
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
