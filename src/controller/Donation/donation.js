@@ -24,8 +24,11 @@ if (keyId && keySecret) {
 // Create Razorpay order for online payments
 export const createDonationOrder = async (req, res) => {
     try {
+        console.log('🔍 Donation API called with:', req.body);
         const { amount, modeofDonation, donorName, donorEmail, donorPhone } = req.body;
         const userId = req.user?._id || null; // Make user optional
+        
+        console.log('🔍 Extracted fields:', { amount, modeofDonation, donorName, donorEmail, donorPhone });
 
         // Check if Razorpay is configured
         if (!razorpay) {
@@ -122,7 +125,17 @@ export const createDonationOrder = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Donation API Error:', {
+            message: err.message,
+            stack: err.stack,
+            requestBody: req.body,
+            timestamp: new Date().toISOString()
+        });
+        res.status(500).json({ 
+            error: 'Server error: 500',
+            details: err.message,
+            timestamp: new Date().toISOString()
+        });
     }
 };
 
