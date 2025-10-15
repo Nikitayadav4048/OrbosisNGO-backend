@@ -107,6 +107,27 @@ app.post('/test-register', async (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/gallery", galleryRouter);
+// Test donation endpoint
+app.post('/test-donation', async (req, res) => {
+  try {
+    console.log('Test donation called with:', req.body);
+    const { amount, modeofDonation } = req.body;
+    
+    if (!amount || !modeofDonation) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    
+    res.json({
+      message: 'Test donation successful',
+      received: { amount, modeofDonation },
+      timestamp: new Date()
+    });
+  } catch (error) {
+    console.error('Test donation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use("/api/donation", donationRouter);
 app.use("/api/volunteer", volunteerRouter);
 app.use("/api/beneficiary", beneficiaryRouter);
