@@ -4,7 +4,7 @@ const donationSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false // Make optional for anonymous donations
     },
     
     amount: {
@@ -15,7 +15,7 @@ const donationSchema = new mongoose.Schema({
     
     modeofDonation: {
         type: String,
-        enum: ["bankTransfer", "upi"],
+        enum: ["bankTransfer", "upi", "cash", "cheque"],
         default: "bankTransfer"
     },
     
