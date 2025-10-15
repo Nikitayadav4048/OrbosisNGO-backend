@@ -5,13 +5,19 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Initialize Razorpay only if keys are available
+// Initialize Razorpay with fallback keys
 let razorpay = null;
-if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_XaFBcDCs2pZQoe';
+const keySecret = process.env.RAZORPAY_KEY_SECRET || '3hv6ZUhPh9gIPTA4uX6jEDM8';
+
+if (keyId && keySecret) {
     razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID,
-        key_secret: process.env.RAZORPAY_KEY_SECRET,
+        key_id: keyId,
+        key_secret: keySecret,
     });
+    console.log('✅ Razorpay initialized with keys');
+} else {
+    console.log('❌ Razorpay keys missing');
 }
 
 
@@ -81,7 +87,7 @@ export const createDonationOrder = async (req, res) => {
             order_id: order.id,
             amount: order.amount,
             currency: order.currency,
-            key_id: process.env.RAZORPAY_KEY_ID,
+            key_id: keyId,
             details: {
                 enteredAmount: amount,
                 totalAmountINR: amount,
