@@ -11,7 +11,13 @@ import Donation from "../../model/Donation/donation.js";
 export const register = async (req, res) => {
 
     try {
+        console.log('Registration attempt:', req.body);
         const { fullName, organisationName, contactNumber, address, area, state, panNumber, gstNumber, modeofDonation, consentForUpdate, email, password, role } = req.body;
+
+        // Validate required fields
+        if (!fullName || !email || !password) {
+            return res.status(400).json({ message: 'fullName, email, and password are required' });
+        }
 
         // Check if email already exists
         const existingEmail = await User.findOne({ email });
@@ -52,7 +58,11 @@ export const register = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error('Registration error:', err);
+        res.status(500).json({ 
+            message: 'Registration failed: ' + err.message,
+            error: process.env.NODE_ENV === 'development' ? err.stack : 'Backend authentication issue. Please contact support.'
+        });
     }
 };
 
