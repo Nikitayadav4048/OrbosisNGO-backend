@@ -12,7 +12,7 @@ import { requireAuth } from "../../middleware/auth.js";
 const donationRouter = express.Router();
 
 // Create Razorpay order for online payments (bankTransfer, upi)
-donationRouter.post("/createOrder", requireAuth, createDonationOrder);
+donationRouter.post("/createOrder", createDonationOrder);
 
 // Verify Razorpay payment
 donationRouter.post("/verifyPayment", verifyDonationPayment);
