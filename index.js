@@ -71,13 +71,37 @@ app.get('/test', async (req, res) => {
 // Test registration endpoint
 app.post('/test-register', async (req, res) => {
   try {
+    const User = (await import('./src/model/Auth/auth.js')).default;
+    const bcrypt = (await import('bcrypt')).default;
+    
+    const { fullName, email, password } = req.body;
+    
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    
+    const hash = await bcrypt.hash(password, 10);
+    const memberId = 'test' + Date.now();
+    
+    const user = await User.create({
+      fullName,
+      email,
+      password: hash,
+      memberId,
+      role: 'donor'
+    });
+    
     res.json({
-      message: 'Test registration endpoint working',
-      body: req.body,
-      timestamp: new Date()
+      message: 'Test registration successful',
+      userId: user._id,
+      memberId: user.memberId
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Test registration error:', error);
+    res.status(500).json({ 
+      error: error.message,
+      stack: error.stack
+    });
   }
 });
 

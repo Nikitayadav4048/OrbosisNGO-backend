@@ -49,9 +49,33 @@ export const createDonationOrder = async (req, res) => {
         }
 
         // Validate payment mode
-        if (!["bankTransfer", "upi"].includes(modeofDonation)) {
+        if (!["bankTransfer", "upi", "cash", "cheque"].includes(modeofDonation)) {
             return res.status(400).json({ 
-                message: 'Only bankTransfer and upi are supported' 
+                message: 'Supported payment modes: bankTransfer, upi, cash, cheque' 
+            });
+        }
+
+        // For cash/cheque donations, skip Razorpay and create direct donation record
+        if (["cash", "cheque"].includes(modeofDonation)) {
+            const donation = await Donation.create({
+                userId,
+                amount,
+                modeofDonation,
+                paymentStatus: "pending", // Admin will verify offline payments
+                donorName: donorName || req.user?.fullName || "Anonymous",
+                donorEmail: donorEmail || req.user?.email || "noemail@example.com",
+                donorPhone: donorPhone || req.user?.contactNumber || "0000000000"
+            });
+
+            return res.json({
+                success: true,
+                message: `${modeofDonation} donation recorded successfully`,
+                donation: {
+                    _id: donation._id,
+                    amount: donation.amount,
+                    modeofDonation: donation.modeofDonation,
+                    paymentStatus: donation.paymentStatus
+                }
             });
         }
 
