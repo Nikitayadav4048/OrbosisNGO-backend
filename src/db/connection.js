@@ -9,10 +9,7 @@ const connectDB = async () => {
     console.log('🔍 Connecting to Atlas cluster...');
     console.log('🔍 URI format check:', mongoUri.startsWith('mongodb+srv') ? 'CORRECT' : 'WRONG');
     
-    await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(mongoUri);
     console.log('✅ MongoDB connected successfully');
   } catch (error) {
     console.error('❌ MongoDB connection error:', error.message);
