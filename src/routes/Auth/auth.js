@@ -5,6 +5,21 @@ import { upload, pdfUpload, cloudinaryUpload, cloudinaryPdfUpload, cloudinaryIma
 
 const authRouter = express.Router();
 
+// Auth API info
+authRouter.get("/", (req, res) => {
+  res.json({
+    message: "Auth API endpoints",
+    endpoints: {
+      "POST /register": "User registration",
+      "POST /login": "User login",
+      "GET /me": "Get current user (requires auth)",
+      "POST /changePassword": "Change password",
+      "POST /forgotPassword": "Forgot password",
+      "GET /getAllVolunteers": "Get all volunteers (requires auth)",
+      "GET /getAllMembers": "Get all members (requires auth)"
+    }
+  });
+});
 
 authRouter.post("/register", register);
 
