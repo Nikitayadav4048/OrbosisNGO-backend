@@ -58,10 +58,16 @@ export const register = async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Registration error:', err);
+        console.error('Registration error details:', {
+            message: err.message,
+            stack: err.stack,
+            name: err.name,
+            code: err.code
+        });
         res.status(500).json({ 
-            message: 'Registration failed: ' + err.message,
-            error: process.env.NODE_ENV === 'development' ? err.stack : 'Backend authentication issue. Please contact support.'
+            message: 'Server error: 500',
+            details: err.message,
+            timestamp: new Date().toISOString()
         });
     }
 };
