@@ -37,6 +37,23 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Make io available to routes
 app.set('io', io);
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'OrbosisNGO Backend API is running!',
+    status: 'Active',
+    endpoints: {
+      auth: '/api/auth',
+      gallery: '/api/gallery',
+      donation: '/api/donation',
+      volunteer: '/api/volunteer',
+      beneficiary: '/api/beneficiary',
+      member: '/api/member',
+      certificate: '/api/certificate'
+    }
+  });
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/gallery", galleryRouter);
 app.use("/api/donation", donationRouter);
