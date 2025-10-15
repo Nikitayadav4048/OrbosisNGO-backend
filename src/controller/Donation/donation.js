@@ -18,8 +18,8 @@ if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
 // Create Razorpay order for online payments
 export const createDonationOrder = async (req, res) => {
     try {
-        const { amount, modeofDonation } = req.body;
-        const userId = req.user._id;
+        const { amount, modeofDonation, donorName, donorEmail, donorPhone } = req.body;
+        const userId = req.user?._id || null; // Make user optional
 
         // Check if Razorpay is configured
         if (!razorpay) {
@@ -55,10 +55,10 @@ export const createDonationOrder = async (req, res) => {
             currency: "INR",
             receipt: `donation_${Date.now()}`,
             notes: {
-                userId: userId.toString(),
+                userId: userId ? userId.toString() : 'anonymous',
                 modeofDonation,
-                donorName: req.user.fullName || "Anonymous",
-                donorEmail: req.user.email || "noemail@example.com"
+                donorName: donorName || req.user?.fullName || "Anonymous",
+                donorEmail: donorEmail || req.user?.email || "noemail@example.com"
             }
         };
 
@@ -71,9 +71,9 @@ export const createDonationOrder = async (req, res) => {
             modeofDonation,
             razorpayOrderId: order.id,
             paymentStatus: "pending",
-            donorName: req.user.fullName || "Anonymous",
-            donorEmail: req.user.email || "noemail@example.com",
-            donorPhone: req.user.contactNumber || "0000000000"
+            donorName: donorName || req.user?.fullName || "Anonymous",
+            donorEmail: donorEmail || req.user?.email || "noemail@example.com",
+            donorPhone: donorPhone || req.user?.contactNumber || "0000000000"
         });
 
         res.json({
@@ -86,8 +86,8 @@ export const createDonationOrder = async (req, res) => {
                 enteredAmount: amount,
                 totalAmountINR: amount,
                 modeofDonation: modeofDonation,
-                donorName: req.user.fullName || "Anonymous",
-                donorEmail: req.user.email || "noemail@example.com"
+                donorName: donorName || req.user?.fullName || "Anonymous",
+                donorEmail: donorEmail || req.user?.email || "noemail@example.com"
             }
         });
 
