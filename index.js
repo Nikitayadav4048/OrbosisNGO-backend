@@ -54,6 +54,33 @@ app.get('/', (req, res) => {
   });
 });
 
+// Test endpoint
+app.get('/test', async (req, res) => {
+  try {
+    const mongoose = await import('mongoose');
+    res.json({
+      message: 'Test endpoint working',
+      database: mongoose.default.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+      timestamp: new Date()
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Test registration endpoint
+app.post('/test-register', async (req, res) => {
+  try {
+    res.json({
+      message: 'Test registration endpoint working',
+      body: req.body,
+      timestamp: new Date()
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/gallery", galleryRouter);
 app.use("/api/donation", donationRouter);
