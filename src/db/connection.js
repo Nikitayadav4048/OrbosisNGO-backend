@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    const mongoUri = process.env.MONGO_URL || process.env.MONGODB_URI || 'mongodb://localhost:27017/orbosis';
+    // Temporary hardcoded URI for testing
+    const mongoUri = process.env.MONGO_URL || process.env.MONGODB_URI || 'mongodb+srv://nikitayadav4048_db_user:orbosismain@cluster0.q8trfdq.mongodb.net/orbosis?retryWrites=true&w=majority&appName=Cluster0';
     console.log('🔍 Attempting to connect to:', mongoUri.substring(0, 50) + '...');
     console.log('🔍 Environment variables:', {
       MONGO_URL: process.env.MONGO_URL ? 'SET' : 'NOT SET',
